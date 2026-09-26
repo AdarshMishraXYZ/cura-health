@@ -3,23 +3,18 @@ import {
   Calendar, 
   Clock, 
   Video, 
-  Building2, 
-  Phone, 
   ShieldCheck, 
-  QrCode, 
-  X, 
-  Sparkles, 
   FileText, 
   ArrowRight,
-  AlertCircle
+  Pill
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { Appointment } from '../../types';
 import { DoctorAvatar } from '../common/DoctorAvatar';
+import { MedicationTracker } from '../health/MedicationTracker';
 
 export const MyAppointments: React.FC = () => {
   const { appointments, cancelAppointment, setActiveVideoCall, savedReports, setActiveTab } = useApp();
-  const [selectedSubTab, setSelectedSubTab] = useState<'upcoming' | 'vault'>('upcoming');
+  const [selectedSubTab, setSelectedSubTab] = useState<'upcoming' | 'tracker' | 'vault'>('upcoming');
 
   const activeAppointments = appointments.filter(a => a.status === 'confirmed');
 
@@ -28,34 +23,49 @@ export const MyAppointments: React.FC = () => {
       {/* Title */}
       <div>
         <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Patient Portal</span>
-        <h2 className="text-lg font-bold text-white tracking-tight">Bookings & Health Records</h2>
+        <h2 className="text-lg font-bold text-white tracking-tight">Care Management & Vault</h2>
       </div>
 
       {/* Sub Tabs */}
-      <div className="flex items-center gap-1 bg-[#121622] p-1 rounded-xl border border-[#1E2536]">
+      <div className="flex items-center gap-1 bg-[#121622] p-1 rounded-2xl border border-[#1E2536]">
         <button
           onClick={() => setSelectedSubTab('upcoming')}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all ${
+          className={`flex-1 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             selectedSubTab === 'upcoming'
-              ? 'bg-blue-600 text-white font-semibold shadow-sm'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          My Appointments ({activeAppointments.length})
+          Bookings ({activeAppointments.length})
+        </button>
+        <button
+          onClick={() => setSelectedSubTab('tracker')}
+          className={`flex-1 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+            selectedSubTab === 'tracker'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Pill className="w-3.5 h-3.5" />
+          Pill Tracker
         </button>
         <button
           onClick={() => setSelectedSubTab('vault')}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all ${
+          className={`flex-1 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             selectedSubTab === 'vault'
-              ? 'bg-blue-600 text-white font-semibold shadow-sm'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          Health Vault & Reports ({savedReports.length})
+          Vault ({savedReports.length})
         </button>
       </div>
 
-      {selectedSubTab === 'upcoming' ? (
+      {selectedSubTab === 'tracker' && (
+        <MedicationTracker />
+      )}
+
+      {selectedSubTab === 'upcoming' && (
         <div className="space-y-3">
           {activeAppointments.length > 0 ? (
             activeAppointments.map((apt) => (
@@ -110,7 +120,7 @@ export const MyAppointments: React.FC = () => {
                   {apt.type === 'video' && (
                     <button
                       onClick={() => setActiveVideoCall(apt)}
-                      className="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                      className="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
                     >
                       <Video className="w-3.5 h-3.5" />
                       <span>Join Telehealth Call</span>
@@ -119,7 +129,7 @@ export const MyAppointments: React.FC = () => {
 
                   <button
                     onClick={() => cancelAppointment(apt.id)}
-                    className="py-2 px-3 bg-[#181D2A] hover:bg-rose-900/30 text-slate-400 hover:text-rose-400 border border-[#232B3D] hover:border-rose-500/30 rounded-xl text-xs font-medium transition-colors"
+                    className="py-2 px-3 bg-[#181D2A] hover:bg-rose-900/30 text-slate-400 hover:text-rose-400 border border-[#232B3D] hover:border-rose-500/30 rounded-xl text-xs font-medium transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -133,14 +143,16 @@ export const MyAppointments: React.FC = () => {
               <p className="text-xs text-slate-500 mt-1">Book an appointment with a top specialist in seconds.</p>
               <button
                 onClick={() => setActiveTab('doctors')}
-                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition-colors shadow-sm"
+                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition-colors shadow-sm cursor-pointer"
               >
                 Browse Doctors
               </button>
             </div>
           )}
         </div>
-      ) : (
+      )}
+
+      {selectedSubTab === 'vault' && (
         <div className="space-y-3">
           {savedReports.map((report) => (
             <div

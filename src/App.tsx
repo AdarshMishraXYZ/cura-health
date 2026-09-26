@@ -13,6 +13,7 @@ import { MyAppointments } from './components/appointments/MyAppointments';
 import { BookingModal } from './components/appointments/BookingModal';
 import { BookingSuccessModal } from './components/appointments/BookingSuccessModal';
 import { TelehealthVideoModal } from './components/appointments/TelehealthVideoModal';
+import { DoctorWorkspace } from './components/workspace/DoctorWorkspace';
 import { Appointment } from './types';
 
 const MainContent: React.FC = () => {
@@ -46,6 +47,8 @@ const MainContent: React.FC = () => {
         return <AiBookingChat />;
       case 'appointments':
         return <MyAppointments />;
+      case 'clinician-view':
+        return <DoctorWorkspace />;
       default:
         return <DoctorList />;
     }
@@ -66,7 +69,7 @@ const MainContent: React.FC = () => {
         <BottomNav />
       </div>
 
-      {/* Doctor Profile with Booking Slots Modal (Page 2) */}
+      {/* Doctor Profile with Booking Slots Modal */}
       {selectedDoctor && (
         <DoctorProfileModal
           doctor={selectedDoctor}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Appointment } from '../../types';
 import { 
   X, 
@@ -7,14 +7,14 @@ import {
   Video, 
   VideoOff, 
   PhoneOff, 
-  MessageSquare, 
   FileText, 
   ShieldCheck, 
   Sparkles,
   Download,
+  Image as ImageIcon,
+  Paperclip,
   CheckCircle2
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
 
 interface TelehealthVideoModalProps {
   appointment: Appointment;
@@ -25,10 +25,14 @@ export const TelehealthVideoModal: React.FC<TelehealthVideoModalProps> = ({ appo
   const [seconds, setSeconds] = useState<number>(0);
   const [isMicOn, setIsMicOn] = useState<boolean>(true);
   const [isVideoOn, setIsVideoOn] = useState<boolean>(true);
-  const [activeSidePanel, setActiveSidePanel] = useState<'notes' | 'rx'>('notes');
+  const [activeSidePanel, setActiveSidePanel] = useState<'notes' | 'rx' | 'media'>('notes');
+  const [sharedImages, setSharedImages] = useState<string[]>([
+    'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&h=200&fit=crop'
+  ]);
   const [doctorNotes, setDoctorNotes] = useState<string>(
     `Patient presents with: ${appointment.symptomsNote}.\nVital signs: Stable.\nDiagnosis: Acute viral pharyngitis with mild low-grade pyrexia.\nTreatment protocol initiated.`
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,6 +45,19 @@ export const TelehealthVideoModal: React.FC<TelehealthVideoModalProps> = ({ appo
     const mins = Math.floor(totalSec / 60).toString().padStart(2, '0');
     const secs = (totalSec % 60).toString().padStart(2, '0');
     return `${mins}:${secs}`;
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setSharedImages(prev => [reader.result as string, ...prev]);
+        setActiveSidePanel('media');
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDownloadRx = () => {
@@ -99,19 +116,26 @@ License #CH-MD-${appointment.doctorId}
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setActiveSidePanel(p => p === 'notes' ? 'rx' : 'notes')}
-                className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs text-slate-200 hover:text-white flex items-center gap-1.5"
+                onClick={() => fileInputRef.current?.click()}
+                className="px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-xs text-slate-200 hover:text-white flex items-center gap-1.5 cursor-pointer"
+                title="Share photo or document with doctor"
               >
-                <FileText className="w-3.5 h-3.5 text-blue-400" />
-                <span>{activeSidePanel === 'notes' ? 'Rx Prescription' : 'Clinical Notes'}</span>
+                <Paperclip className="w-3.5 h-3.5 text-blue-400" />
+                <span>Share Image / Rx</span>
               </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,.pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
             </div>
           </div>
 
           {/* Simulated Doctor Video Screen */}
           <div className="flex-1 flex flex-col items-center justify-center relative p-6">
             <div className="relative text-center">
-              {/* Doctor Avatar with audio pulsing ring */}
               <div className="relative mx-auto mb-4">
                 {appointment.doctorAvatar ? (
                   <img
@@ -161,7 +185,7 @@ License #CH-MD-${appointment.doctorId}
           <div className="h-18 bg-[#0B0E16]/90 backdrop-blur-md border-t border-[#1C2232] flex items-center justify-center gap-3 px-4 z-20">
             <button
               onClick={() => setIsMicOn(!isMicOn)}
-              className={`p-3 rounded-full transition-all ${
+              className={`p-3 rounded-full transition-all cursor-pointer ${
                 isMicOn 
                   ? 'bg-[#1C2232] text-white hover:bg-[#252E44]' 
                   : 'bg-rose-600 text-white'
@@ -173,7 +197,7 @@ License #CH-MD-${appointment.doctorId}
 
             <button
               onClick={() => setIsVideoOn(!isVideoOn)}
-              className={`p-3 rounded-full transition-all ${
+              className={`p-3 rounded-full transition-all cursor-pointer ${
                 isVideoOn 
                   ? 'bg-[#1C2232] text-white hover:bg-[#252E44]' 
                   : 'bg-rose-600 text-white'
@@ -185,7 +209,7 @@ License #CH-MD-${appointment.doctorId}
 
             <button
               onClick={onClose}
-              className="p-3 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-transform active:scale-95 shadow-lg shadow-rose-600/40"
+              className="p-3 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-transform active:scale-95 shadow-lg shadow-rose-600/40 cursor-pointer"
               title="End Call"
             >
               <PhoneOff className="w-5 h-5" />
@@ -193,14 +217,35 @@ License #CH-MD-${appointment.doctorId}
           </div>
         </div>
 
-        {/* Right Side Clinical Notes & e-Prescription Drawer */}
+        {/* Right Side Clinical Notes, e-Prescription & Shared Media Drawer */}
         <div className="w-full md:w-80 bg-[#121622] p-4 flex flex-col space-y-3">
+          {/* Sub Drawer Tabs */}
           <div className="flex items-center justify-between pb-2 border-b border-[#1C2232]">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                {activeSidePanel === 'notes' ? 'Live Clinical Notes' : 'e-Prescription (Rx)'}
-              </h4>
+            <div className="flex gap-1">
+              <button
+                onClick={() => setActiveSidePanel('notes')}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                  activeSidePanel === 'notes' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Notes
+              </button>
+              <button
+                onClick={() => setActiveSidePanel('rx')}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                  activeSidePanel === 'rx' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Rx Pad
+              </button>
+              <button
+                onClick={() => setActiveSidePanel('media')}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                  activeSidePanel === 'media' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Media ({sharedImages.length})
+              </button>
             </div>
             <button
               onClick={onClose}
@@ -210,7 +255,7 @@ License #CH-MD-${appointment.doctorId}
             </button>
           </div>
 
-          {activeSidePanel === 'notes' ? (
+          {activeSidePanel === 'notes' && (
             <div className="flex-1 flex flex-col space-y-3">
               <p className="text-[11px] text-slate-400">
                 Doctor's synchronized diagnosis notes during the active telehealth session:
@@ -223,12 +268,14 @@ License #CH-MD-${appointment.doctorId}
               />
               <button
                 onClick={() => setActiveSidePanel('rx')}
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-xs transition-colors shadow-sm"
+                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
               >
                 Review Digital Prescription
               </button>
             </div>
-          ) : (
+          )}
+
+          {activeSidePanel === 'rx' && (
             <div className="flex-1 flex flex-col space-y-3 text-xs">
               <div className="bg-[#181D2A] p-3 rounded-xl border border-[#232B3D] space-y-2">
                 <span className="text-[10px] text-blue-400 font-bold uppercase block tracking-wider">Prescribed Meds</span>
@@ -246,10 +293,35 @@ License #CH-MD-${appointment.doctorId}
 
               <button
                 onClick={handleDownloadRx}
-                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 mt-auto shadow-md shadow-emerald-600/30"
+                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 mt-auto shadow-md shadow-emerald-600/30 cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download e-Prescription</span>
+              </button>
+            </div>
+          )}
+
+          {activeSidePanel === 'media' && (
+            <div className="flex-1 flex flex-col space-y-3 text-xs">
+              <p className="text-[11px] text-slate-400">
+                Shared during call (visible to Dr. {appointment.doctorName.split(' ')[1]}):
+              </p>
+              <div className="space-y-2 overflow-y-auto max-h-[300px]">
+                {sharedImages.map((imgUrl, idx) => (
+                  <div key={idx} className="rounded-xl overflow-hidden border border-[#222B3D] relative group">
+                    <img src={imgUrl} alt={`Shared asset ${idx + 1}`} className="w-full h-32 object-cover" />
+                    <span className="absolute bottom-1 right-1 bg-black/70 px-2 py-0.5 rounded text-[9px] text-white">
+                      File #{idx + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1 mt-auto cursor-pointer"
+              >
+                <Paperclip className="w-3.5 h-3.5" />
+                Upload Another File
               </button>
             </div>
           )}
