@@ -22,20 +22,26 @@ export const ReportAnalyzer: React.FC = () => {
   const [activeReportIndex, setActiveReportIndex] = useState<number>(0);
   const [reports, setReports] = useState<MedicalReport[]>(SAMPLE_REPORTS);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const currentReport = reports[activeReportIndex] || reports[0];
+  const isNoApiKey = currentReport?.overallSummary === '__NO_API_KEY__';
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
+    setUploadError(null);
     try {
       const parsed = await parseMedicalReport(file);
       setReports(prev => [parsed, ...prev]);
       setActiveReportIndex(0);
+    } catch (err: any) {
+      setUploadError(err?.message || 'Failed to analyze report. Please try again.');
     } finally {
       setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -151,54 +157,79 @@ export const ReportAnalyzer: React.FC = () => {
             ))}
           </div>
 
-          {/* Summary Table */}
-          <div className="space-y-2 pt-1 border-t border-[#1C2232]">
-            <h4 className="text-xs font-semibold text-slate-400">Summary</h4>
+          {/* Upload Error */}
+          {uploadError && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs text-red-300 leading-relaxed">
+              ⚠️ {uploadError}
+            </div>
+          )}
 
-            <div className="bg-[#161A26] rounded-xl border border-[#222838] overflow-hidden divide-y divide-[#1F2536]">
-              {currentReport.biomarkers.map((bio, index) => (
-                <div 
-                  key={index} 
-                  className="p-3 flex items-center justify-between text-xs hover:bg-[#1A1F2E] transition-colors"
-                >
-                  <div>
-                    <span className="font-semibold text-slate-200">{bio.name}</span>
-                    <div className="text-[10px] text-slate-400 mt-0.5">Ref: {bio.referenceRange}</div>
-                  </div>
-
-                  <div className="text-right">
-                    <span className="text-slate-100 font-mono font-medium mr-1.5">
-                      {bio.value} {bio.unit}
-                    </span>
-                    {getStatusBadge(bio.status)}
-                  </div>
+          {/* No API Key Warning */}
+          {isNoApiKey ? (
+            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs">
+                <Sparkles className="w-4 h-4" />
+                <span>Gemini API Key Required</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                To analyze your lab report, the AI needs to actually <strong>read your document</strong>. Without a Gemini API key, showing fake results would be dangerous.
+              </p>
+              <ol className="text-xs text-slate-400 space-y-1 list-decimal list-inside">
+                <li>Tap <strong className="text-white">⚡ AI Engine</strong> in the top bar</li>
+                <li>Get a free key at <strong className="text-blue-400">aistudio.google.com/app/apikey</strong></li>
+                <li>Paste the key and save — then upload your report</li>
+              </ol>
+            </div>
+          ) : (
+            <>
+              {/* Summary Table */}
+              <div className="space-y-2 pt-1 border-t border-[#1C2232]">
+                <h4 className="text-xs font-semibold text-slate-400">Summary</h4>
+                <div className="bg-[#161A26] rounded-xl border border-[#222838] overflow-hidden divide-y divide-[#1F2536]">
+                  {currentReport.biomarkers.map((bio, index) => (
+                    <div
+                      key={index}
+                      className="p-3 flex items-center justify-between text-xs hover:bg-[#1A1F2E] transition-colors"
+                    >
+                      <div>
+                        <span className="font-semibold text-slate-200">{bio.name}</span>
+                        <div className="text-[10px] text-slate-400 mt-0.5">Ref: {bio.referenceRange}</div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-slate-100 font-mono font-medium mr-1.5">
+                          {bio.value} {bio.unit}
+                        </span>
+                        {getStatusBadge(bio.status)}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* AI Insight callout */}
-          <div className="p-3.5 bg-[#141A27] border border-blue-500/20 rounded-xl space-y-1.5">
-            <div className="flex items-center gap-1.5 text-blue-400 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>AI Clinical Insight</span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              {currentReport.aiRecommendation}
-            </p>
-          </div>
+              {/* AI Insight callout */}
+              <div className="p-3.5 bg-[#141A27] border border-blue-500/20 rounded-xl space-y-1.5">
+                <div className="flex items-center gap-1.5 text-blue-400 text-xs font-semibold">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>AI Clinical Insight</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {currentReport.aiRecommendation}
+                </p>
+              </div>
 
-          {/* Action Button */}
-          <button
-            onClick={() => navigateToSpecialty(currentReport.recommendedSpecialty)}
-            className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white font-semibold rounded-xl text-xs transition-all shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Calendar className="w-4 h-4" />
-            <span>
-              Book a {currentReport.recommendedSpecialty === 'general' ? 'general physician' : currentReport.recommendedSpecialty}
-            </span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+              {/* Action Button */}
+              <button
+                onClick={() => navigateToSpecialty(currentReport.recommendedSpecialty)}
+                className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white font-semibold rounded-xl text-xs transition-all shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>
+                  Book a {currentReport.recommendedSpecialty === 'general' ? 'general physician' : currentReport.recommendedSpecialty}
+                </span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

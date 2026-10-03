@@ -87,7 +87,7 @@ JSON OUTPUT FORMAT SCHEMA (Strictly return ONLY raw JSON, no markdown backticks,
 }
 `;
 
-// Helper: Make real REST call to Gemini 2.0 / 1.5 Flash
+// Helper: Make real REST call to Gemini 1.5 Flash
 async function callGeminiRaw(userPrompt: string, apiKey: string): Promise<any> {
   const model = 'gemini-1.5-flash';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -131,13 +131,13 @@ async function callGeminiRaw(userPrompt: string, apiKey: string): Promise<any> {
   return JSON.parse(cleaned);
 }
 
-// ─── NEURO-CLINICAL REASONING INFERENCE AGENT (High-grade Zero-Key Agent) ────
-// If user doesn't have an API key right now, this algorithmic agent evaluates
-// intent, semantics, anatomy, and pharmacology dynamically (NO naive canned fallbacks).
+// ─── SAFE NO-KEY FALLBACK ──────────────────────────────────────────────────────
+// When no Gemini API key is configured, we ONLY handle greetings safely.
+// For ANY medical/symptom/drug query, we refuse to fabricate advice.
+// Fabricating dosages or diagnoses without real LLM reasoning is dangerous.
 function localAgenticClinicalReasoning(text: string): any {
   const lower = text.toLowerCase().trim();
 
-  // 1. Intent: Greeting / Casual Conversational Banter
   const isGreeting = /^(h+i+|h+e+y+|h+e+l+l+o+|h+o+l+a+|howdy|sup|yo|greetings)\b/i.test(lower);
   const isHowAreYou = lower.includes('how are you') || lower.includes('how r u') || lower.includes('whats up') || lower.includes("what's up");
   const isIdentity = lower.includes('who are you') || lower.includes('what can you do') || lower.includes('what are you');
@@ -145,209 +145,81 @@ function localAgenticClinicalReasoning(text: string): any {
   if (isHowAreYou) {
     return {
       intent: 'casual_chat',
-      conversationalText: "I'm doing well and feeling great, thank you for asking! 😊\n\nI'm ready to assist you with any clinical questions, symptom checks, or medicine recommendations. How are you feeling today?",
+      conversationalText: "I'm doing great, thank you for asking! 😊\n\nTo give you **safe, accurate symptom analysis and medical guidance**, I need my Gemini AI engine active.\n\n👉 Tap the **⚡ AI Engine** button in the top bar to add your free Gemini API key — takes just 30 seconds!",
       suggestedSpecialtyId: 'general',
       suggestedSpecialtyName: 'General physician',
       matchScore: 90,
       urgencyLevel: 'routine',
-      clinicalReasoning: 'Conversational wellness inquiry.',
-      recommendations: ['Stay hydrated with water throughout the day.', 'Maintain regular physical movement.'],
+      clinicalReasoning: '',
+      recommendations: [],
       recommendedMedicines: [],
       shouldBookAppointment: false,
       bookingPrompt: '',
-      quickReplyOptions: [
-        'Difficulty walking and foot pain',
-        'I have a sore throat and fever',
-        'Check medication safety',
-        'Browse available doctors'
-      ]
+      quickReplyOptions: ['How do I get a Gemini API key?', 'Browse doctors', 'What can you help me with?']
     };
   }
 
   if (isIdentity) {
     return {
       intent: 'casual_chat',
-      conversationalText: "I am **Cura Health AI**, an agentic clinical medical assistant! 🩺\n\nI dynamically evaluate symptoms across all major medical specialties (Orthopedics, Neurology, Cardiology, Dermatology, Gastroenterology, and more), guide you on safe OTC medicines, and connect you with top doctors.",
+      conversationalText: "I am **Cura Health AI** — powered by Google Gemini! 🩺\n\nI can:\n• **Analyze your symptoms** and route you to the right specialist\n• **Check drug safety** and OTC medicine dosages\n• **Read your lab reports** and explain biomarkers\n• **Book appointments** with doctors\n\n⚡ **Add your free Gemini API key** (tap the AI Engine button in the top bar) to unlock all AI capabilities.",
       suggestedSpecialtyId: 'general',
       suggestedSpecialtyName: 'General physician',
       matchScore: 95,
       urgencyLevel: 'routine',
-      clinicalReasoning: 'Assistant capability overview.',
+      clinicalReasoning: '',
       recommendations: [],
       recommendedMedicines: [],
       shouldBookAppointment: false,
       bookingPrompt: '',
-      quickReplyOptions: ['Analyze my symptoms', 'Check drug interactions', 'Find a doctor']
+      quickReplyOptions: ['How to get API key?', 'Browse doctors', 'Book an appointment']
     };
   }
 
   if (isGreeting && lower.length < 35) {
     return {
       intent: 'greeting',
-      conversationalText: "Hello there! 👋 Great to meet you! How are you doing today?\n\nI'm your intelligent clinical health assistant. Tell me what symptoms or health questions you have, and I will analyze them for you right away!",
+      conversationalText: "Hello! 👋 Welcome to **Cura Health AI**!\n\nI'm your intelligent clinical assistant. To give you **safe, accurate medical analysis** I need my AI engine configured.\n\n👉 Tap **⚡ AI Engine** in the top bar → paste your free **Gemini API key** from [aistudio.google.com](https://aistudio.google.com/app/apikey) → I'll be fully operational in seconds!",
       suggestedSpecialtyId: 'general',
       suggestedSpecialtyName: 'General physician',
       matchScore: 90,
       urgencyLevel: 'routine',
-      clinicalReasoning: 'Initial patient greeting and intake.',
+      clinicalReasoning: '',
       recommendations: [],
       recommendedMedicines: [],
       shouldBookAppointment: false,
       bookingPrompt: '',
       quickReplyOptions: [
-        'Difficulty walking and foot pain',
-        'Sore throat and mild fever',
-        'Persistent headache with light sensitivity',
-        'Is Paracetamol safe to take daily?'
+        'How do I get a free Gemini API key?',
+        'Browse available doctors',
+        'Book an appointment'
       ]
     };
   }
 
-  // 2. Intent: Symptom Analysis with Anatomical & Physiological Dissection
-  const boneJointTokens = ['walk', 'walking', 'foot', 'feet', 'hand', 'hands', 'bone', 'joint', 'knee', 'stiff', 'sprain', 'limp', 'movement', 'moving', 'mobility', 'wrist', 'ankle', 'heel', 'shoulder', 'spine', 'back'];
-  const neuroTokens = ['headache', 'migraine', 'light sensitivity', 'photophobia', 'dizzy', 'dizziness', 'vertigo', 'numbness', 'tingling', 'seizure', 'aura', 'brain'];
-  const cardioTokens = ['chest', 'heart', 'palpitation', 'breathless', 'shortness of breath', 'pressure in chest', 'hypertension', 'bp'];
-  const dermTokens = ['rash', 'skin', 'itch', 'eczema', 'acne', 'hives', 'spots', 'peeling', 'allergy'];
-  const gastroTokens = ['stomach', 'acid', 'reflux', 'heartburn', 'bloating', 'gas', 'nausea', 'vomit', 'diarrhea', 'cramp'];
-  const entTokens = ['throat', 'sore throat', 'tonsil', 'ear', 'swallow', 'cough', 'sinus', 'runny nose'];
-
-  let matchedSpecialty: SpecialtyId = 'general';
-  let specName = 'General physician';
-  let doctor = DOCTORS[0];
-  let clinicalReason = 'Your symptoms indicate a systemic health inquiry best addressed with initial primary care evaluation.';
-  let recs: string[] = ['Get ample rest and maintain adequate hydration.', 'Monitor symptom duration and temperature.'];
-  let medicines: MedicineSuggestion[] = [];
-  let shouldBook = false;
-  let bookingText = '';
-
-  if (boneJointTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'orthopedist';
-    specName = 'Orthopedist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'orthopedist') || DOCTORS[0];
-    clinicalReason = 'Presentation indicates acute musculoskeletal restriction, joint articular inflammation, or ligamentous strain impeding normal weight-bearing and limb mobility.';
-    recs = [
-      'Implement the R.I.C.E protocol (Rest, Ice for 15-20 min, Compression, Elevation).',
-      'Avoid high-impact weight bearing or repetitive joint load on the affected limb.',
-      'Consult an orthopedist for physical range-of-motion testing and radiographic X-ray imaging.'
-    ];
-    medicines = [
-      {
-        name: 'Paracetamol (Acetaminophen) 650mg',
-        type: 'otc',
-        dosage: '1 tablet every 6–8 hours after meals (Max 3,000mg/day)',
-        indication: 'First-line analgesia for bone and joint pain with high gastric safety.',
-        precautions: 'Do not exceed 3,000mg in 24 hours. Avoid alcohol.'
-      },
-      {
-        name: 'Topical Diclofenac Gel 1.16%',
-        type: 'otc',
-        dosage: 'Apply a 2-inch ribbon over affected joints 3-4 times daily',
-        indication: 'Localized anti-inflammatory relief straight to inflamed joints with minimal blood absorption.',
-        precautions: 'Do not apply over broken skin or under tight occlusive wraps.'
-      }
-    ];
-    shouldBook = true;
-    bookingText = `Because walking impairment and limb mobility difficulty warrant clinical joint evaluation and X-rays, would you like me to book a consultation with ${doctor.name} (${specName})?`;
-  } else if (neuroTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'neurologist';
-    specName = 'Neurologist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'neurologist') || DOCTORS[1];
-    clinicalReason = 'Persistent head pain with photophobia (light sensitivity) or nerve sensations suggest neurovascular involvement such as migraine or intracranial tension.';
-    recs = [
-      'Rest in a quiet, dark room away from smartphone screens and fluorescent lights.',
-      'Hydrate with water and oral electrolytes immediately.',
-      'Seek emergency evaluation if headache is accompanied by neck stiffness or high fever.'
-    ];
-    medicines = [
-      {
-        name: 'Ibuprofen 400mg or Paracetamol 500mg',
-        type: 'otc',
-        dosage: '1 tablet with food at onset of pain',
-        indication: 'Inhibits inflammatory prostaglandins causing vascular head pain.',
-        precautions: 'Always take with food to protect stomach lining.'
-      }
-    ];
-    shouldBook = true;
-    bookingText = `Would you like me to schedule a consultation with ${doctor.name} (${specName})?`;
-  } else if (cardioTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'cardiologist';
-    specName = 'Cardiologist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'cardiologist') || DOCTORS[0];
-    clinicalReason = 'Reported chest discomfort or cardiac rhythm sensations require prompt cardiovascular review and resting ECG.';
-    recs = ['Avoid physical exertion and caffeine.', 'If pain radiates to your arm, jaw or back, call emergency services.'];
-    shouldBook = true;
-    bookingText = `Would you like to book an appointment with ${doctor.name} (${specName})?`;
-  } else if (dermTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'dermatologist';
-    specName = 'Dermatologist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'dermatologist') || DOCTORS[0];
-    clinicalReason = 'Cutaneous irritation or localized rash morphology warrants dermatological evaluation and epidermal barrier soothing.';
-    recs = ['Apply fragrance-free gentle emollient.', 'Avoid hot water and scratching.'];
-    medicines = [
-      {
-        name: 'Cetirizine 10mg',
-        type: 'otc',
-        dosage: '1 tablet once daily in the evening',
-        indication: 'Relieves cutaneous histamine release and itching.',
-        precautions: 'May cause mild drowsiness in sensitive individuals.'
-      }
-    ];
-    shouldBook = false;
-    bookingText = `Would you like to consult with ${doctor.name} (${specName})?`;
-  } else if (gastroTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'gastroenterologist';
-    specName = 'Gastroenterologist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'gastroenterologist') || DOCTORS[0];
-    clinicalReason = 'Symptoms point toward gastroesophageal acid reflux (GERD) or dyspepsia with gastric mucosal irritation.';
-    recs = ['Avoid lying down for 2-3 hours after meals.', 'Eliminate spicy, deep-fried, and carbonated triggers.'];
-    medicines = [
-      {
-        name: 'Antacid Oral Suspension',
-        type: 'otc',
-        dosage: '10-20ml 30-60 minutes after meals',
-        indication: 'Rapidly neutralizes excess stomach acid.',
-        precautions: 'Separate from other oral medicines by at least 2 hours.'
-      }
-    ];
-    shouldBook = true;
-    bookingText = `Would you like to consult with ${doctor.name} (${specName})?`;
-  } else if (entTokens.some(t => lower.includes(t))) {
-    matchedSpecialty = 'ent';
-    specName = 'ENT specialist';
-    doctor = DOCTORS.find(d => d.specialtyId === 'ent') || DOCTORS[0];
-    clinicalReason = 'Upper respiratory ear-nose-throat symptoms indicating pharyngeal mucosal irritation.';
-    recs = ['Gargle with warm salt water 3 times daily.', 'Use warm steam inhalation.'];
-    medicines = [
-      {
-        name: 'Antiseptic Throat Lozenges',
-        type: 'otc',
-        dosage: '1 lozenge dissolved slowly every 2-3 hours',
-        indication: 'Local pharyngeal anesthetic and antiseptic comfort.',
-        precautions: 'Allow to dissolve slowly; do not chew.'
-      }
-    ];
-  }
-
-  const isSevere = lower.includes('severe') || lower.includes('cannot walk') || lower.includes('3 days') || lower.includes('urgent');
-
+  // ── Any medical/symptom/drug query without an API key ───────────────────────
+  // We DO NOT fabricate dosages, diagnoses, or specialist routing without LLM.
+  // Returning fake medical advice without real reasoning is dangerous.
   return {
-    intent: 'symptom_triage',
-    conversationalText: `${clinicalReason}\n\n### Clinical Triage & Care Plan:\n• **Suggested Specialist**: **${specName}**\n• **Recommended OTC Relief**: ${medicines.map(m => m.name).join(', ') || 'Rest and hydration'}\n\n${shouldBook || isSevere ? `⚠️ **Clinical Advice**: ${bookingText || `Consulting ${doctor.name} is recommended.`}` : '*Monitor symptoms over the next 48 hours.*'}`,
-    suggestedSpecialtyId: matchedSpecialty,
-    suggestedSpecialtyName: specName,
-    matchScore: 97,
-    urgencyLevel: isSevere ? 'moderate' : 'routine',
-    clinicalReasoning: clinicalReason,
-    recommendations: recs,
-    recommendedMedicines: medicines,
-    shouldBookAppointment: shouldBook || isSevere,
-    bookingPrompt: bookingText,
-    recommendedDoctor: doctor,
+    intent: 'no_api_key',
+    conversationalText: "⚠️ **AI Engine Not Configured**\n\nTo safely analyze your symptoms, suggest medicines, or provide clinical guidance — I need my **Gemini AI engine** to be active.\n\nWithout real AI reasoning, fabricating medical advice would be dangerous to your health.\n\n**Activate in 30 seconds:**\n1. Tap the **⚡ AI Engine** button in the top bar\n2. Get a free key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)\n3. Paste the key and save\n\nOnce active, I can accurately analyze any symptom and give evidence-based guidance. 🩺",
+    suggestedSpecialtyId: 'general',
+    suggestedSpecialtyName: 'General physician',
+    matchScore: 0,
+    urgencyLevel: 'routine',
+    clinicalReasoning: 'Gemini API key required for safe clinical reasoning.',
+    recommendations: [
+      'Configure your Gemini API key to enable AI-powered medical analysis.',
+      'You can still browse doctors and book appointments without an API key.',
+      'For urgent symptoms, please consult a healthcare professional directly.'
+    ],
+    recommendedMedicines: [],
+    shouldBookAppointment: false,
+    bookingPrompt: '',
     quickReplyOptions: [
-      `Book appointment with ${specName}`,
-      'Is it safe to use these medicines?',
-      'Tell me more home remedies',
-      'Ask another question'
+      'How to get free Gemini API key?',
+      'Browse doctors anyway',
+      'Book an appointment'
     ]
   };
 }
@@ -370,11 +242,11 @@ export async function analyzeSymptomsWithLLMAgent(symptomsText: string): Promise
         disclaimer: 'Clinical AI triage inference — not a definitive medical diagnosis.'
       };
     } catch (err) {
-      console.warn('Live Gemini API call encountered an issue, running Neuro-Clinical Reasoning Agent:', err);
+      console.warn('Live Gemini API call encountered an issue:', err);
     }
   }
 
-  // Pure Neuro-Clinical reasoning engine
+  // Safe fallback — only returns API-key prompt, no fabricated medical data
   await new Promise(r => setTimeout(r, 400));
   const result = localAgenticClinicalReasoning(symptomsText);
   return {
@@ -383,9 +255,11 @@ export async function analyzeSymptomsWithLLMAgent(symptomsText: string): Promise
     suggestedSpecialtyName: result.suggestedSpecialtyName,
     matchScore: result.matchScore,
     urgencyLevel: result.urgencyLevel,
-    reasoning: result.clinicalReasoning,
+    reasoning: result.clinicalReasoning || result.conversationalText,
     recommendations: result.recommendations,
-    disclaimer: 'Clinical AI triage inference — not a definitive medical diagnosis.'
+    disclaimer: result.matchScore === 0
+      ? 'Add your Gemini API key to enable real AI-powered triage.'
+      : 'Clinical AI triage inference — not a definitive medical diagnosis.'
   };
 }
 
@@ -424,14 +298,14 @@ export async function runAgenticChat(userText: string, chatHistory: ChatMessage[
         }
       ];
     } catch (err) {
-      console.warn('Gemini Live API error, running Neuro-Clinical Agent:', err);
+      console.warn('Gemini Live API error:', err);
     }
   }
 
-  // Pure Neuro-Clinical reasoning engine
+  // Safe fallback — no fabricated medical advice
   await new Promise(r => setTimeout(r, 450));
   const res = localAgenticClinicalReasoning(userText);
-  const doctor = res.recommendedDoctor || DOCTORS.find(d => d.specialtyId === res.suggestedSpecialtyId) || DOCTORS[0];
+  const doctor = DOCTORS.find(d => d.specialtyId === res.suggestedSpecialtyId) || DOCTORS[0];
 
   return [
     {
