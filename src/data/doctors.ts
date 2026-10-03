@@ -1,7 +1,7 @@
 import { Doctor } from '../types';
 
 export const DOCTORS: Doctor[] = [
-  // ================= GENERAL PHYSICIANS (4 Doctors) =================
+  // ================= GENERAL PHYSICIANS =================
   {
     id: 'doc-1',
     name: 'Dr. Richard James',
@@ -18,16 +18,16 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 142,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 40,
+    consultationFee: 8,
     about: 'Dedicated to holistic general medicine, acute viral infection management, hypertension control, and lifestyle medicine. Believes in patient-first communicative healthcare and evidence-based pharmacotherapy.',
     hospital: 'Apex Health Center · Downtown',
     address: '450 Lexington Ave, Suite 300, New York, NY',
     languages: ['English', 'Spanish'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['09:30', '10:00', '11:30', '14:00', '16:30'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['09:30', '10:30', '11:00', '15:00', '17:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['08:30', '10:00', '12:00', '14:30', '16:00'] },
-      { dateStr: 'Tue 29', fullDate: '2026-09-29', slots: ['09:00', '11:00', '13:30', '15:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:30', '10:00', '11:30', '14:00', '16:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '10:30', '11:00', '15:00', '17:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['08:30', '10:00', '12:00', '14:30', '16:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:00', '11:00', '13:30', '15:00'] }
     ]
   },
   {
@@ -46,15 +46,15 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 215,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 45,
+    consultationFee: 9,
     about: 'Specializes in comprehensive primary care, complex diagnostic dilemmas, chronic disease management, and wellness coaching. Known for her attentive listening and empathetic patient interactions.',
     hospital: 'St. Claire Family Health Center',
     address: '112 Broadway, Floor 4, New York, NY',
     languages: ['English', 'Mandarin'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['10:00', '11:00', '14:30', '16:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['09:00', '11:30', '13:00', '16:30'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['10:30', '12:00', '15:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '11:00', '14:30', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:00', '11:30', '13:00', '16:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:30', '12:00', '15:00'] }
     ]
   },
   {
@@ -73,14 +73,14 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 320,
     status: 'busy',
     statusLabel: 'Busy',
-    consultationFee: 50,
+    consultationFee: 10,
     about: 'Senior primary care internist with extensive clinical background in managing adult multimorbidities, preventive pharmacology, and health optimization.',
     hospital: 'Harvard Affiliated Health Partners',
     address: '78 Boston St, Cambridge, MA',
     languages: ['English'],
     availableDates: [
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['14:00', '15:30', '17:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['11:00', '13:30', '16:00'] }
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['14:00', '15:30', '17:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['11:00', '13:30', '16:00'] }
     ]
   },
   {
@@ -99,19 +99,47 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 168,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 40,
+    consultationFee: 8,
     about: 'Passionate family physician with a focus on holistic wellness, digestive balance, and early preventative screening for common chronic conditions.',
     hospital: 'CityCare Medical Pavilion',
     address: '220 Central Park South, New York, NY',
     languages: ['English', 'Hindi', 'Gujarati'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['09:00', '10:30', '12:00', '15:30'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:00', '11:00', '14:00'] },
-      { dateStr: 'Tue 29', fullDate: '2026-09-29', slots: ['08:30', '10:00', '13:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:00', '10:30', '12:00', '15:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:00', '11:00', '14:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['08:30', '10:00', '13:00'] }
+    ]
+  },
+  {
+    id: 'doc-ind-1',
+    name: 'Dr. Arjun Sharma',
+    initials: 'AS',
+    avatarUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'general',
+    specialtyName: 'General physician',
+    qualifications: 'MBBS, MD (General Medicine), DNB',
+    education: 'AIIMS New Delhi',
+    experienceYears: 10,
+    patientsTreated: 9200,
+    subSpecialties: ['Typhoid & Dengue', 'Diabetes Management', 'Preventive Health', 'Fever Triage'],
+    rating: 4.93,
+    reviewCount: 412,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 7,
+    about: 'AIIMS-trained general physician with a decade of experience in tropical disease management, diabetes care, and comprehensive adult health checkups. Trusted by over 9,000 patients across Delhi NCR.',
+    hospital: 'AIIMS OPD · Ansari Nagar',
+    address: 'Sri Aurobindo Marg, Ansari Nagar, New Delhi – 110029',
+    languages: ['English', 'Hindi'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:00', '10:00', '11:00', '14:00', '15:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '10:30', '12:00', '16:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['08:30', '10:00', '11:30', '14:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:00', '11:00', '15:00'] }
     ]
   },
 
-  // ================= NEUROLOGISTS (3 Doctors) =================
+  // ================= NEUROLOGISTS =================
   {
     id: 'doc-2',
     name: 'Dr. Zoe Kelly',
@@ -128,16 +156,16 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 98,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 50,
+    consultationFee: 9,
     about: 'Focuses on preventive care, early diagnosis and long-term treatment planning for neurological conditions including migraines, peripheral neuropathy, and sleep disorders.',
     hospital: 'Metropolitan Neuroscience Institute',
     address: '770 Park Ave, New York, NY',
     languages: ['English', 'French'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['10:00', '10:30', '11:00', '11:30', '14:00', '15:30'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:00', '11:00', '12:00', '16:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['09:30', '10:30', '11:30', '14:00', '15:00'] },
-      { dateStr: 'Tue 29', fullDate: '2026-09-29', slots: ['10:00', '11:30', '14:30', '16:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '10:30', '11:00', '11:30', '14:00', '15:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:00', '11:00', '12:00', '16:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['09:30', '10:30', '11:30', '14:00', '15:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['10:00', '11:30', '14:30', '16:00'] }
     ]
   },
   {
@@ -156,45 +184,46 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 280,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 65,
+    consultationFee: 10,
     about: 'Senior neurological specialist with dual expertise in clinical diagnostics and advanced cranial electrophysiology. Special interest in difficult-to-manage refractory headaches and cranial nerve disorders.',
     hospital: 'Bay Area Neurological Center',
     address: '505 Parnassus Ave, San Francisco, CA',
     languages: ['English', 'Spanish'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['11:00', '13:00', '15:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:30', '14:00', '16:30'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['09:00', '11:00', '15:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['11:00', '13:00', '15:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:30', '14:00', '16:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['09:00', '11:00', '15:30'] }
     ]
   },
   {
-    id: 'doc-2c',
-    name: 'Dr. Aris Thorne',
-    initials: 'AT',
+    id: 'doc-ind-2',
+    name: 'Dr. Suresh Iyer',
+    initials: 'SI',
     avatarUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=300',
     specialtyId: 'neurologist',
     specialtyName: 'Neurologist',
-    qualifications: 'MD, FRCP (Neurology)',
-    education: 'Yale School of Medicine',
-    experienceYears: 8,
-    patientsTreated: 3900,
-    subSpecialties: ['Vestibular Vertigo', 'Cervicogenic Cephalea', 'Autonomic Neuropathy'],
-    rating: 4.87,
-    reviewCount: 145,
-    status: 'busy',
-    statusLabel: 'Busy',
-    consultationFee: 55,
-    about: 'Expert clinician focused on vestibular balance assessment, cervical spine associated headaches, and non-invasive neuromodulation.',
-    hospital: 'Northeast Spine & Nerve Center',
-    address: '330 Cedar St, New Haven, CT',
-    languages: ['English', 'Greek'],
+    qualifications: 'MBBS, MD, DM (Neurology), PGIMER',
+    education: 'Narayana Medical College, Bangalore',
+    experienceYears: 15,
+    patientsTreated: 11000,
+    subSpecialties: ['Stroke Rehabilitation', 'Parkinson\'s Disease', 'Epilepsy', 'Migraine Management'],
+    rating: 4.96,
+    reviewCount: 530,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 9,
+    about: 'One of South India\'s leading neurologists with 15 years of clinical excellence in stroke care, movement disorders, and epilepsy management. Associated with Narayana Health, Bangalore.',
+    hospital: 'Narayana Health City · Bangalore',
+    address: '258/A Bommasandra Industrial Area, Bangalore – 560099',
+    languages: ['English', 'Hindi', 'Tamil', 'Kannada'],
     availableDates: [
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['14:00', '16:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['10:00', '12:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '11:00', '14:00', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:30', '15:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '12:00', '14:30', '16:30'] }
     ]
   },
 
-  // ================= CARDIOLOGISTS (3 Doctors) =================
+  // ================= CARDIOLOGISTS =================
   {
     id: 'doc-5',
     name: 'Dr. Marcus Vance',
@@ -211,15 +240,15 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 240,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 75,
+    consultationFee: 10,
     about: 'Senior consultant cardiologist specializing in lipid management, coronary risk assessment, preventative cardiology, and echocardiography.',
     hospital: 'Heart & Vascular Pavilion',
     address: '600 N Wolfe St, Baltimore, MD',
     languages: ['English'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['14:00', '15:00', '16:30'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:00', '11:30', '12:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['09:00', '10:30', '14:00', '16:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['14:00', '15:00', '16:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:00', '11:30', '12:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['09:00', '10:30', '14:00', '16:00'] }
     ]
   },
   {
@@ -238,19 +267,47 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 190,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 70,
+    consultationFee: 10,
     about: 'Committed to early cardiovascular detection, non-invasive imaging, and customized cardiovascular lifestyle rehabilitation.',
     hospital: 'Metropolitan Heart Clinic',
     address: '100 East 77th St, New York, NY',
     languages: ['English', 'Arabic'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['09:30', '11:00', '14:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['11:00', '13:00', '15:30'] },
-      { dateStr: 'Tue 29', fullDate: '2026-09-29', slots: ['10:00', '14:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:30', '11:00', '14:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['11:00', '13:00', '15:30'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['10:00', '14:30'] }
+    ]
+  },
+  {
+    id: 'doc-ind-3',
+    name: 'Dr. Rajesh Kumar',
+    initials: 'RK',
+    avatarUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'cardiologist',
+    specialtyName: 'Cardiologist',
+    qualifications: 'MBBS, MD (Medicine), DM (Cardiology), FACC',
+    education: 'KEM Hospital & Seth GS Medical College, Mumbai',
+    experienceYears: 18,
+    patientsTreated: 14000,
+    subSpecialties: ['Interventional Cardiology', 'Heart Failure', 'Coronary Angioplasty', 'Pacemaker Implant'],
+    rating: 4.97,
+    reviewCount: 780,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 10,
+    about: 'Highly experienced interventional cardiologist at Fortis Hospital Mumbai with 18 years of expertise in coronary interventions, structural heart disease, and advanced heart failure management.',
+    hospital: 'Fortis Hospital · Mulund, Mumbai',
+    address: 'Mulund Goregaon Link Rd, Mulund West, Mumbai – 400078',
+    languages: ['English', 'Hindi', 'Marathi'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '11:30', '14:00', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:00', '10:30', '13:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '12:00', '15:30'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:30', '11:00', '14:30'] }
     ]
   },
 
-  // ================= DERMATOLOGISTS (3 Doctors) =================
+  // ================= DERMATOLOGISTS =================
   {
     id: 'doc-6',
     name: 'Dr. Chloe Chen',
@@ -267,45 +324,47 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 165,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 50,
+    consultationFee: 8,
     about: 'Passionate about medical dermatology, eczema management, psoriasis therapies, and skin cancer screenings with high-resolution dermoscopy.',
     hospital: 'ClearSkin Clinical Center',
     address: '3400 Civic Center Blvd, Philadelphia, PA',
     languages: ['English', 'Mandarin'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['10:00', '11:30', '13:00', '15:30'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['11:00', '12:30', '14:30'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['09:30', '11:00', '15:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '11:30', '13:00', '15:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['11:00', '12:30', '14:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['09:30', '11:00', '15:00'] }
     ]
   },
   {
-    id: 'doc-6b',
-    name: 'Dr. Liam O’Connor',
-    initials: 'LO',
-    avatarUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300',
+    id: 'doc-ind-4',
+    name: 'Dr. Kavitha Menon',
+    initials: 'KM',
+    avatarUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300',
     specialtyId: 'dermatologist',
     specialtyName: 'Dermatologist',
-    qualifications: 'MD, FAAD (Dermatology)',
-    education: 'Northwestern University Feinberg School of Medicine',
-    experienceYears: 11,
-    patientsTreated: 6700,
-    subSpecialties: ['Allergic Contact Rash', 'Psoriasis Biologics', 'Rosacea Management'],
+    qualifications: 'MBBS, MD (Dermatology), Fellowship in Cosmetic Dermatology',
+    education: 'Madras Medical College, Chennai',
+    experienceYears: 12,
+    patientsTreated: 8500,
+    subSpecialties: ['Acne & Pigmentation', 'Psoriasis', 'Hair Loss (Alopecia)', 'Chemical Peels & Laser'],
     rating: 4.91,
-    reviewCount: 210,
+    reviewCount: 460,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 55,
-    about: 'Expert in clinical cutaneous immunology, severe allergic reactions, and evidence-based topical therapeutics.',
-    hospital: 'Midwest Skin Health Institute',
-    address: '676 N St Clair St, Chicago, IL',
-    languages: ['English'],
+    consultationFee: 8,
+    about: 'Apollo-certified dermatologist with 12 years of expertise in treating tropical skin conditions, pigmentation disorders, and hair loss in South Asian skin types. Known for her personalized skincare plans.',
+    hospital: 'Apollo Hospitals · Greams Road, Chennai',
+    address: '21 Greams Lane, Off Greams Road, Chennai – 600006',
+    languages: ['English', 'Tamil', 'Malayalam', 'Hindi'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['09:00', '11:00', '14:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:30', '13:30', '16:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:30', '10:30', '12:00', '15:00', '16:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:00', '11:00', '13:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['09:00', '11:00', '14:00', '16:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['10:30', '12:00', '15:30'] }
     ]
   },
 
-  // ================= GASTROENTEROLOGISTS (2 Doctors) =================
+  // ================= GASTROENTEROLOGISTS =================
   {
     id: 'doc-3',
     name: 'Dr. Sara Miles',
@@ -322,15 +381,15 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 180,
     status: 'busy',
     statusLabel: 'Busy',
-    consultationFee: 65,
+    consultationFee: 9,
     about: 'Expertise in IBS, GERD, endoscopic evaluations, fatty liver management, and gut microbiome optimization.',
     hospital: 'Saint Jude Digestive Clinic',
     address: '2301 Erwin Rd, Durham, NC',
     languages: ['English'],
     availableDates: [
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['14:00', '15:30'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['11:00', '16:00'] },
-      { dateStr: 'Tue 29', fullDate: '2026-09-29', slots: ['09:30', '13:00'] }
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['14:00', '15:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['11:00', '16:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:30', '13:00'] }
     ]
   },
   {
@@ -349,18 +408,18 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 310,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 60,
+    consultationFee: 9,
     about: 'Comprehensive digestive specialist with strong focus on acid reflux relief, ulcer healing, and digestive tract endoscopy.',
     hospital: 'Premier Digestive Health Center',
     address: '200 First St SW, Rochester, MN',
     languages: ['English', 'Bengali'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['10:00', '12:00', '15:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['09:30', '11:30', '14:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '12:00', '15:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:30', '14:30'] }
     ]
   },
 
-  // ================= GYNECOLOGISTS (2 Doctors) =================
+  // ================= GYNECOLOGISTS =================
   {
     id: 'doc-4',
     name: 'Dr. Elena Rostova',
@@ -377,19 +436,47 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 310,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 55,
-    about: 'Specializes in women’s preventive wellness, hormonal therapy, minimally invasive laparoscopy, and prenatal guidance.',
-    hospital: 'Women’s Life Medical Pavilion',
+    consultationFee: 9,
+    about: 'Specializes in women\'s preventive wellness, hormonal therapy, minimally invasive laparoscopy, and prenatal guidance.',
+    hospital: 'Women\'s Life Medical Pavilion',
     address: '10833 Le Conte Ave, Los Angeles, CA',
     languages: ['English', 'German'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['11:00', '12:30', '15:00', '17:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['09:00', '10:30', '14:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['10:00', '11:00', '14:30', '16:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['11:00', '12:30', '15:00', '17:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:00', '10:30', '14:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '11:00', '14:30', '16:30'] }
+    ]
+  },
+  {
+    id: 'doc-ind-5',
+    name: 'Dr. Sneha Reddy',
+    initials: 'SR',
+    avatarUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'gynecologist',
+    specialtyName: 'Gynecologist',
+    qualifications: 'MBBS, MS (OBG), Fellowship in Laparoscopic Surgery',
+    education: 'Osmania Medical College, Hyderabad',
+    experienceYears: 14,
+    patientsTreated: 12000,
+    subSpecialties: ['High-Risk Pregnancy', 'PCOS', 'Laparoscopic Myomectomy', 'Infertility Management'],
+    rating: 4.96,
+    reviewCount: 640,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 9,
+    about: 'Senior gynaecologist at Manipal Hospital Bangalore with 14 years of clinical excellence in high-risk obstetrics, advanced laparoscopy, and PCOS management for Indian women.',
+    hospital: 'Manipal Hospitals · Old Airport Road, Bangalore',
+    address: '98 HAL Airport Rd, Kodihalli, Bangalore – 560008',
+    languages: ['English', 'Telugu', 'Hindi', 'Kannada'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:00', '10:00', '11:30', '14:30', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:00', '13:00', '15:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '11:30', '14:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:00', '10:30', '12:00', '16:00'] }
     ]
   },
 
-  // ================= PEDIATRICIANS (2 Doctors) =================
+  // ================= PEDIATRICIANS =================
   {
     id: 'doc-7',
     name: 'Dr. Noah Patterson',
@@ -406,18 +493,46 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 195,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 45,
+    consultationFee: 8,
     about: 'Gentle, empathetic pediatric care for newborns up to teenagers. Special interest in childhood respiratory health and immunizations.',
-    hospital: 'Children’s Wellness Clinic',
+    hospital: 'Children\'s Wellness Clinic',
     address: '6621 Fannin St, Houston, TX',
     languages: ['English'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['09:00', '10:00', '11:00', '13:30', '15:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['10:00', '11:30', '14:00'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:00', '10:00', '11:00', '13:30', '15:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['10:00', '11:30', '14:00'] }
+    ]
+  },
+  {
+    id: 'doc-ind-6',
+    name: 'Dr. Anita Desai',
+    initials: 'AD',
+    avatarUrl: 'https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'pediatrician',
+    specialtyName: 'Pediatrician',
+    qualifications: 'MBBS, MD (Pediatrics), Fellowship in Neonatology',
+    education: 'Grant Medical College, Sir JJ Hospital, Mumbai',
+    experienceYears: 11,
+    patientsTreated: 10500,
+    subSpecialties: ['Neonatal Care', 'Childhood Nutrition', 'Vaccination Schedule', 'Pediatric Infections'],
+    rating: 4.94,
+    reviewCount: 510,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 7,
+    about: 'Highly rated pediatrician at Sir HN Reliance Foundation Hospital, Mumbai with 11 years experience in neonatal care, childhood nutrition, and vaccine-preventable diseases. Trusted by thousands of Mumbai families.',
+    hospital: 'Sir HN Reliance Foundation Hospital · Girgaon, Mumbai',
+    address: 'Raja Rammohan Roy Rd, Girgaon, Mumbai – 400004',
+    languages: ['English', 'Hindi', 'Marathi', 'Gujarati'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:30', '10:30', '11:30', '14:00', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:00', '10:00', '12:00', '15:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '11:00', '14:30'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:30', '11:30', '15:00', '16:30'] }
     ]
   },
 
-  // ================= ORTHOPEDISTS (2 Doctors) =================
+  // ================= ORTHOPEDISTS =================
   {
     id: 'doc-8',
     name: 'Dr. Aaron Hayes',
@@ -434,18 +549,46 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 130,
     status: 'busy',
     statusLabel: 'Busy',
-    consultationFee: 70,
+    consultationFee: 10,
     about: 'Specialist in joint preservation, sports injury rehabilitation, knee and shoulder arthroscopy, and spine biomechanics.',
     hospital: 'Orthopedic Spine & Joint Care',
     address: '1959 NE Pacific St, Seattle, WA',
     languages: ['English'],
     availableDates: [
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['14:30', '16:00'] },
-      { dateStr: 'Mon 28', fullDate: '2026-09-28', slots: ['10:00', '11:30', '15:00'] }
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['14:30', '16:00'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '11:30', '15:00'] }
+    ]
+  },
+  {
+    id: 'doc-ind-7',
+    name: 'Dr. Amit Verma',
+    initials: 'AV',
+    avatarUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'orthopedist',
+    specialtyName: 'Orthopedist',
+    qualifications: 'MBBS, MS (Orthopaedics), Fellowship in Joint Replacement, FRCS',
+    education: 'Maulana Azad Medical College, New Delhi',
+    experienceYears: 16,
+    patientsTreated: 13000,
+    subSpecialties: ['Total Knee Replacement', 'Hip Replacement', 'Sports Medicine', 'Spine Surgery'],
+    rating: 4.95,
+    reviewCount: 680,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 10,
+    about: 'Leading orthopedic surgeon at Max Hospital Delhi with 16 years of surgical excellence. Performs over 500 joint replacement surgeries annually. Known for minimal pain, rapid recovery protocols.',
+    hospital: 'Max Super Speciality Hospital · Saket, New Delhi',
+    address: '2 Press Enclave Marg, Saket, New Delhi – 110017',
+    languages: ['English', 'Hindi', 'Punjabi'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:00', '11:30', '14:00', '15:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:00', '13:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:30', '12:00', '15:00', '17:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:00', '11:00', '14:00', '16:30'] }
     ]
   },
 
-  // ================= ENT SPECIALISTS (2 Doctors) =================
+  // ================= ENT SPECIALISTS =================
   {
     id: 'doc-9',
     name: 'Dr. Tariq Al-Mansoor',
@@ -454,7 +597,7 @@ export const DOCTORS: Doctor[] = [
     specialtyId: 'ent',
     specialtyName: 'ENT specialist',
     qualifications: 'MD, Head & Neck Surgery Specialist',
-    education: 'King’s College London School of Medicine',
+    education: 'King\'s College London School of Medicine',
     experienceYears: 10,
     patientsTreated: 4700,
     subSpecialties: ['Allergic Rhinitis', 'Chronic Sinusitis', 'Hearing Impairment', 'Tonsil Disorders'],
@@ -462,14 +605,42 @@ export const DOCTORS: Doctor[] = [
     reviewCount: 112,
     status: 'available',
     statusLabel: 'Available',
-    consultationFee: 45,
+    consultationFee: 8,
     about: 'Diagnosing allergic rhinitis, chronic sinusitis, hearing impairment, and chronic pharyngitis/tonsil infections with state-of-the-art endoscopes.',
     hospital: 'City Ear, Nose & Throat Center',
     address: 'Westminster Bridge Rd, London, UK',
     languages: ['English', 'Arabic'],
     availableDates: [
-      { dateStr: 'Sat 26', fullDate: '2026-09-26', slots: ['10:30', '11:30', '14:00', '16:00'] },
-      { dateStr: 'Sun 27', fullDate: '2026-09-27', slots: ['09:30', '11:00', '15:30'] }
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['10:30', '11:30', '14:00', '16:00'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:00', '15:30'] }
+    ]
+  },
+  {
+    id: 'doc-ind-8',
+    name: 'Dr. Pooja Nair',
+    initials: 'PN',
+    avatarUrl: 'https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=crop&q=80&w=300',
+    specialtyId: 'ent',
+    specialtyName: 'ENT specialist',
+    qualifications: 'MBBS, MS (ENT), Fellowship in Cochlear Implant Surgery',
+    education: 'Government Medical College, Trivandrum, Kerala',
+    experienceYears: 9,
+    patientsTreated: 7200,
+    subSpecialties: ['Cochlear Implant', 'Allergic Rhinitis', 'Sinus Endoscopy', 'Snoring & Sleep Apnea'],
+    rating: 4.93,
+    reviewCount: 390,
+    status: 'available',
+    statusLabel: 'Available',
+    consultationFee: 8,
+    about: 'ENT surgeon at Aster DM Healthcare, Kerala specialising in functional endoscopic sinus surgery (FESS), cochlear implants for hearing loss, and management of sleep-related breathing disorders.',
+    hospital: 'Aster Medcity · Kochi, Kerala',
+    address: 'Kuttisahib Rd, South Chittoor, Cheranalloor, Kochi – 682027',
+    languages: ['English', 'Malayalam', 'Tamil', 'Hindi'],
+    availableDates: [
+      { dateStr: 'Fri 03', fullDate: '2026-10-03', slots: ['09:00', '10:00', '11:30', '14:00', '16:30'] },
+      { dateStr: 'Sat 04', fullDate: '2026-10-04', slots: ['09:30', '11:00', '13:00', '15:30'] },
+      { dateStr: 'Mon 06', fullDate: '2026-10-06', slots: ['10:00', '12:00', '14:30', '16:00'] },
+      { dateStr: 'Tue 07', fullDate: '2026-10-07', slots: ['09:00', '11:00', '15:00'] }
     ]
   }
 ];
