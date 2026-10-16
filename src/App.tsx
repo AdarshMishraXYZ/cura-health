@@ -7,8 +7,6 @@ import { DoctorList } from './components/doctors/DoctorList';
 import { SpecialtyGrid } from './components/doctors/SpecialtyGrid';
 import { DoctorProfileModal } from './components/doctors/DoctorProfileModal';
 import { SymptomAnalyzer } from './components/ai/SymptomAnalyzer';
-import { ReportAnalyzer } from './components/ai/ReportAnalyzer';
-import { AiBookingChat } from './components/ai/AiBookingChat';
 import { MyAppointments } from './components/appointments/MyAppointments';
 import { BookingModal } from './components/appointments/BookingModal';
 import { BookingSuccessModal } from './components/appointments/BookingSuccessModal';
@@ -41,10 +39,6 @@ const MainContent: React.FC = () => {
         return <SpecialtyGrid />;
       case 'symptom-ai':
         return <SymptomAnalyzer />;
-      case 'report-ai':
-        return <ReportAnalyzer />;
-      case 'chat-assistant':
-        return <AiBookingChat />;
       case 'appointments':
         return <MyAppointments />;
       case 'clinician-view':

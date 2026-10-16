@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, LayoutGrid, BrainCircuit, FileText, Bot, Calendar } from 'lucide-react';
+import { Users, BrainCircuit, Calendar } from 'lucide-react';
 import { useApp, ActiveTab } from '../../context/AppContext';
 
 export const BottomNav: React.FC = () => {
@@ -7,10 +7,7 @@ export const BottomNav: React.FC = () => {
 
   const tabs: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: 'doctors', label: 'Doctors', icon: <Users className="w-4 h-4" /> },
-    { id: 'specialties', label: 'Categories', icon: <LayoutGrid className="w-4 h-4" /> },
-    { id: 'symptom-ai', label: 'AI Triage', icon: <BrainCircuit className="w-4 h-4" /> },
-    { id: 'report-ai', label: 'Lab Reports', icon: <FileText className="w-4 h-4" /> },
-    { id: 'chat-assistant', label: 'Smart AI', icon: <Bot className="w-4 h-4" /> },
+    { id: 'symptom-ai', label: 'Symptom Check', icon: <BrainCircuit className="w-4 h-4" /> },
     { 
       id: 'appointments', 
       label: 'Bookings', 

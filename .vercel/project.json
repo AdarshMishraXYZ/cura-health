@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_lviiFscyasBWMRnAPdpx1YuAeoCv",
+  "orgId": "team_d0Yrw92TozO5BUStm9NKG9UH",
+  "projectName": "cura-health-",
+  "settings": {
+    "createdAt": 1790427010052,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

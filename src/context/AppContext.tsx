@@ -1,38 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Doctor, SpecialtyId, Appointment, MedicalReport } from '../types';
-import { SAMPLE_REPORTS } from '../data/sampleReports';
+import { Doctor, SpecialtyId, Appointment } from '../types';
 
 export type ActiveTab = 
   | 'doctors'
   | 'specialties'
   | 'symptom-ai'
-  | 'report-ai'
-  | 'chat-assistant'
   | 'appointments'
-  | 'medication-tracker'
-  | 'body-map'
-  | 'drug-checker'
-  | 'health-trends'
-  | 'doctor-comparison'
-  | 'clinician-view'
-  | 'family-profiles';
-
-// ─── Family Profile ──────────────────────────────────────────────────────────
-export interface FamilyProfile {
-  id: string;
-  name: string;
-  relation: 'Self' | 'Spouse' | 'Child' | 'Parent' | 'Other';
-  age: number;
-  bloodGroup?: string;
-  avatarInitials: string;
-  avatarColor: string;
-}
-
-const DEFAULT_PROFILES: FamilyProfile[] = [
-  { id: 'self', name: 'You (Primary)', relation: 'Self', age: 28, bloodGroup: 'O+', avatarInitials: 'ME', avatarColor: 'bg-blue-600' },
-  { id: 'parent-1', name: 'Dad', relation: 'Parent', age: 58, bloodGroup: 'A+', avatarInitials: 'DA', avatarColor: 'bg-emerald-600' },
-  { id: 'child-1', name: 'Ananya', relation: 'Child', age: 7, bloodGroup: 'B+', avatarInitials: 'AN', avatarColor: 'bg-pink-500' },
-];
+  | 'clinician-view';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function loadFromStorage<T>(key: string, fallback: T): T {
@@ -68,19 +42,11 @@ interface AppContextType {
   appointments: Appointment[];
   createAppointment: (appointment: Omit<Appointment, 'id' | 'createdAt' | 'status' | 'qrCodeToken'>) => Appointment;
   cancelAppointment: (id: string) => void;
-  savedReports: MedicalReport[];
-  addReport: (report: MedicalReport) => void;
   activeVideoCall: Appointment | null;
   setActiveVideoCall: (apt: Appointment | null) => void;
   isMobilePreview: boolean;
   setIsMobilePreview: (val: boolean) => void;
   navigateToSpecialty: (specialtyId: SpecialtyId) => void;
-  // Family profiles
-  familyProfiles: FamilyProfile[];
-  activeFamilyProfile: FamilyProfile;
-  setActiveFamilyProfile: (profile: FamilyProfile) => void;
-  addFamilyProfile: (profile: Omit<FamilyProfile, 'id'>) => void;
-  removeFamilyProfile: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -119,30 +85,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isMobilePreview, setIsMobilePreview] = useState<boolean>(true);
   const [activeVideoCall, setActiveVideoCall] = useState<Appointment | null>(null);
 
-  // ── Persisted state ────────────────────────────────────────────────────────
-  const [savedReports, setSavedReports] = useState<MedicalReport[]>(() =>
-    loadFromStorage('cura_reports', SAMPLE_REPORTS)
-  );
-
   const [appointments, setAppointments] = useState<Appointment[]>(() =>
     loadFromStorage('cura_appointments', DEFAULT_APPOINTMENTS)
   );
 
-  const [familyProfiles, setFamilyProfiles] = useState<FamilyProfile[]>(() =>
-    loadFromStorage('cura_family_profiles', DEFAULT_PROFILES)
-  );
-
-  const [activeFamilyProfile, setActiveFamilyProfileState] = useState<FamilyProfile>(() => {
-    const profiles = loadFromStorage('cura_family_profiles', DEFAULT_PROFILES);
-    const activeId = loadFromStorage<string>('cura_active_profile_id', 'self');
-    return profiles.find(p => p.id === activeId) ?? profiles[0];
-  });
-
   // ── Sync to localStorage ───────────────────────────────────────────────────
   useEffect(() => { saveToStorage('cura_appointments', appointments); }, [appointments]);
-  useEffect(() => { saveToStorage('cura_reports', savedReports); }, [savedReports]);
-  useEffect(() => { saveToStorage('cura_family_profiles', familyProfiles); }, [familyProfiles]);
-  useEffect(() => { saveToStorage('cura_active_profile_id', activeFamilyProfile.id); }, [activeFamilyProfile]);
 
   // ── Actions ───────────────────────────────────────────────────────────────
   const createAppointment = (aptData: Omit<Appointment, 'id' | 'createdAt' | 'status' | 'qrCodeToken'>): Appointment => {
@@ -161,34 +109,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' } : a));
   };
 
-  const addReport = (report: MedicalReport) => {
-    setSavedReports(prev => [report, ...prev]);
-  };
-
   const navigateToSpecialty = (specialtyId: SpecialtyId) => {
     setSelectedSpecialtyId(specialtyId);
     setActiveTab('doctors');
-  };
-
-  const setActiveFamilyProfile = (profile: FamilyProfile) => {
-    setActiveFamilyProfileState(profile);
-  };
-
-  const addFamilyProfile = (profileData: Omit<FamilyProfile, 'id'>) => {
-    const newProfile: FamilyProfile = {
-      ...profileData,
-      id: `profile-${Date.now()}`
-    };
-    setFamilyProfiles(prev => [...prev, newProfile]);
-  };
-
-  const removeFamilyProfile = (id: string) => {
-    if (id === 'self') return; // Can't remove primary
-    setFamilyProfiles(prev => prev.filter(p => p.id !== id));
-    if (activeFamilyProfile.id === id) {
-      const remaining = familyProfiles.filter(p => p.id !== id);
-      if (remaining.length > 0) setActiveFamilyProfileState(remaining[0]);
-    }
   };
 
   return (
@@ -211,18 +134,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         appointments,
         createAppointment,
         cancelAppointment,
-        savedReports,
-        addReport,
         activeVideoCall,
         setActiveVideoCall,
         isMobilePreview,
         setIsMobilePreview,
         navigateToSpecialty,
-        familyProfiles,
-        activeFamilyProfile,
-        setActiveFamilyProfile,
-        addFamilyProfile,
-        removeFamilyProfile,
       }}
     >
       {children}
