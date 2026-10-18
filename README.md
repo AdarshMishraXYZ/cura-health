@@ -1,12 +1,16 @@
 # 🏥 AI-Powered Clinical Triage & Smart Healthcare Scheduling
 
-An AI-powered healthcare platform that combines intelligent clinical triage, concurrency-safe appointment scheduling, patient management, clinician workflows, and telehealth consultation tools in a modern full-stack application.
+- **AI Clinical Triage:** Integrated Google Gemini 2.5 Flash with React and Express for natural-language symptom analysis, nine-specialty classification, and structured JSON responses.
 
-Built with React, TypeScript, Node.js, Express, PostgreSQL, Prisma ORM, and Google Gemini 2.5 Flash.
+- **Concurrency-Safe Scheduling:** Used PostgreSQL transactions, Prisma ORM, and database constraints to prevent double booking and handle scheduling conflicts with HTTP 409 responses.
 
-> **Disclaimer:** This project is intended for educational and demonstration purposes. AI-generated triage suggestions are not medical diagnoses and must not replace evaluation by a qualified healthcare professional.
+- **Dual-Portal Workflow:** Developed separate patient and clinician portals for appointment booking, digital pass generation, live queues, and prescription management.
 
----
+- **Telehealth Consultation Suite:** Built a video consultation simulation with in-call timers, digital prescriptions, and clinical notes.
+
+- **Secure Backend Architecture:** Implemented server-side AI API proxying, authentication, token-bucket rate limiting, and clinical audit trails.
+
+- **Full-Stack Technology:** Built using React 19, TypeScript, Node.js, Express, PostgreSQL 16, Prisma ORM, Tailwind CSS v4, and Vite 8.
 
 ## ✨ Key Features
 
