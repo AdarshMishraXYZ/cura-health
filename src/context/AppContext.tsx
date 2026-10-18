@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Doctor, SpecialtyId, Appointment } from '../types';
 
 export type ActiveTab = 
+  | 'home'
   | 'doctors'
   | 'specialties'
   | 'symptom-ai'
@@ -75,7 +76,7 @@ const DEFAULT_APPOINTMENTS: Appointment[] = [
 ];
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('doctors');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [selectedSpecialtyId, setSelectedSpecialtyId] = useState<SpecialtyId | null>('general');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);

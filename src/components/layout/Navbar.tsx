@@ -17,7 +17,7 @@ export const Navbar: React.FC = () => {
           {/* Brand Identity */}
           <div 
             className="flex items-center gap-2 cursor-pointer group" 
-            onClick={() => setActiveTab('doctors')}
+            onClick={() => setActiveTab('home')}
           >
             <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-sm text-white shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform">
               <Stethoscope className="w-4 h-4 text-white" />

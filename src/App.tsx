@@ -12,6 +12,7 @@ import { BookingModal } from './components/appointments/BookingModal';
 import { BookingSuccessModal } from './components/appointments/BookingSuccessModal';
 import { TelehealthVideoModal } from './components/appointments/TelehealthVideoModal';
 import { DoctorWorkspace } from './components/workspace/DoctorWorkspace';
+import { LandingPage } from './components/home/LandingPage';
 import { Appointment } from './types';
 
 const MainContent: React.FC = () => {
@@ -33,6 +34,8 @@ const MainContent: React.FC = () => {
 
   const renderActiveView = () => {
     switch (activeTab) {
+      case 'home':
+        return <LandingPage />;
       case 'doctors':
         return <DoctorList />;
       case 'specialties':
@@ -44,7 +47,7 @@ const MainContent: React.FC = () => {
       case 'clinician-view':
         return <DoctorWorkspace />;
       default:
-        return <DoctorList />;
+        return <LandingPage />;
     }
   };
 

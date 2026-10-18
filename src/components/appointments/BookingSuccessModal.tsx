@@ -8,6 +8,7 @@ import {
   QrCode, 
   Download, 
   ArrowRight, 
+  ArrowLeft,
   X, 
   ShieldCheck 
 } from 'lucide-react';
@@ -54,11 +55,34 @@ END:VCALENDAR`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       <div 
-        className="w-full max-w-md bg-[#11141E] border border-[#202738] rounded-3xl p-6 shadow-2xl space-y-4 text-center"
+        className="w-full max-w-md bg-[#11141E] border border-[#202738] rounded-3xl p-6 shadow-2xl space-y-4 text-center relative"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Top Navigation Bar: Back Arrow & Close */}
+        <div className="flex items-center justify-between pb-1">
+          <button
+            onClick={onClose}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 -ml-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all text-xs font-medium cursor-pointer"
+            title="Go back"
+          >
+            <ArrowLeft className="w-4 h-4 text-blue-400" />
+            <span>Back</span>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="p-1.5 -mr-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
         {/* Celebration icon */}
         <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center">
           <CheckCircle2 className="w-8 h-8" />
@@ -124,7 +148,7 @@ END:VCALENDAR`;
           {appointment.type === 'video' && (
             <button
               onClick={handleJoinCall}
-              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs transition-colors shadow-md shadow-blue-600/30 flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs transition-colors shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Video className="w-4 h-4" />
               <span>Simulate Telehealth Video Call</span>
@@ -134,7 +158,7 @@ END:VCALENDAR`;
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={handleDownloadCalendar}
-              className="py-2.5 px-3 bg-[#161B28] hover:bg-[#1E2536] text-slate-200 text-xs font-medium rounded-xl border border-[#22293C] transition-colors flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 bg-[#161B28] hover:bg-[#1E2536] text-slate-200 text-xs font-medium rounded-xl border border-[#22293C] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-blue-400" />
               <span>Add to Calendar</span>
@@ -145,7 +169,7 @@ END:VCALENDAR`;
                 onClose();
                 setActiveTab('appointments');
               }}
-              className="py-2.5 px-3 bg-[#161B28] hover:bg-[#1E2536] text-slate-200 text-xs font-medium rounded-xl border border-[#22293C] transition-colors flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 bg-[#161B28] hover:bg-[#1E2536] text-slate-200 text-xs font-medium rounded-xl border border-[#22293C] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>View Bookings</span>
               <ArrowRight className="w-3.5 h-3.5 text-blue-400" />

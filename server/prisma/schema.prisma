@@ -1,0 +1,92 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         Role          @default(PATIENT)
+  phone        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+
+  @@map("users")
+}
+
+model Doctor {
+  id                String        @id
+  name              String
+  specialty         String
+  qualification     String
+  experience        Int
+  rating            Float
+  reviewCount       Int
+  fee               Float
+  location          String
+  hospital          String
+  avatar            String
+  about             String
+  nextAvailable     String
+  consultationModes String[]
+  availability      Json
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  appointments      Appointment[]
+
+  @@map("doctors")
+}
+
+model Appointment {
+  id               String            @id @default(uuid())
+  patientId        String?
+  patient          User?             @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  doctorId         String
+  doctor           Doctor            @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patientName      String
+  patientAge       Int?
+  patientGender    String?
+  contactPhone     String?
+  symptomsNote     String
+  date             String
+  timeSlot         String
+  status           AppointmentStatus @default(CONFIRMED)
+  consultationType String            @default("video")
+  clinicalUrgency  String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([doctorId, date, timeSlot])
+  @@map("appointments")
+}
+
+model TriageLog {
+  id             String   @id @default(uuid())
+  symptoms       String
+  specialtyId    String
+  matchScore     Int
+  urgencyLevel   String
+  clinicalReason String
+  ipAddress      String?
+  createdAt      DateTime @default(now())
+
+  @@map("triage_logs")
+}
